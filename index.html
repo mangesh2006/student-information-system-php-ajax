@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information System</title>
+</head>
+
+<style>
+    body {
+        background-color: grey;
+        display: flex;
+        justify-content: center;
+    }
+
+    #container {
+        background-color: white;
+        width: 100vh;
+        height: 100ch;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 100px;
+        border-bottom: 2px solid black;
+        width: 100vh;
+        background-color: rgb(221, 156, 72);
+    }
+
+    #head {
+        margin-left: 5px;
+    }
+
+    #search {
+        padding: 5px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-right: 5px;
+    }
+
+    #label {
+        font-size: x-large;
+        margin-left: 326px;
+        margin-right: -110px;
+    }
+
+    .form {
+        margin-top: 5px;
+        overflow-y: auto;
+    }
+
+    th {
+        background-color: rgb(19, 19, 252);
+        color: white;
+    }
+
+    .table {
+        width: 100vh;
+    }
+
+    .record {
+        margin-left: 5px;
+        text-decoration: underline;
+        flex-direction: row;
+    }
+
+    #button {
+        padding: 5px;
+        margin-right: 5px;
+        border-radius: 3px;
+        border: 1px solid black;
+    }
+
+    #add {
+        padding: 8px;
+        background: black;
+        color: white;
+        border-radius: 5px;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        position: relative;
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        width: 300px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    #Submit {
+        padding: 5px;
+    }
+
+    .upd_modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: none;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .upd_modal-content {
+        position: relative;
+        background-color: #fff;
+        margin: 10% auto;
+        padding: 20px;
+        width: 300px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .upd_close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div id="container">
+        <div class="heading">
+            <h1 id="head">PHP WITH AJAX</h1>
+            <h6 for="search" id="label">Search: </h6>
+            <input type="text" name="search" id="search" onkeyup="search()">
+        </div>
+        <div class="record">
+            <h2>All Records</h2>
+            <button type="button" id="add" onclick="openModal()" style="cursor: pointer;">Add New</button>
+        </div>
+        <div class="form">
+            <table border="1" cellpadding='8px' cellspacing='0' class="table">
+                <thead>
+                    <tr>
+                        <th>Roll No.</th>
+                        <th>Name</th>
+                        <th>Course</th>
+                        <th>Semester</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tbody" style="text-align: center;"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span id="closeBtn" class="close">&times;</span>
+            <h2>Add Data</h2>
+            <label>Roll No:</label>
+            <input type="text" name="rollno" id="rollno" style="margin: 5px; padding: 8px;"><br>
+
+            <label>Name:</label>
+            <input type="text" name="name" id="name" style="margin: 5px; padding: 8px;" autocomplete="off"><br>
+
+            <label>Course:</label>
+            <input type="text" name="course" id="course" style="margin: 5px; padding: 8px;"><br>
+
+            <label>Semester:</label>
+            <input type="text" name="semester" id="semester" style="margin: 5px; padding: 8px;"><br>
+
+            <button type="button" id="Submit" onclick="insert()">Submit</button>
+        </div>
+    </div>
+
+    <div id="update_modal" class="upd_modal" style="display: none;">
+        <div class="upd_modal-content">
+            <span id="upd_closeBtn" class="upd_close">&times;</span>
+            <h2>Update Data</h2>
+            <label>Roll No:</label>
+            <input type="text" id="upd_rollno" style="margin: 5px; padding: 8px;"><br>
+
+            <label>Name:</label>
+            <input type="text" id="upd_name" style="margin: 5px; padding: 8px;"><br>
+
+            <label>Course:</label>
+            <input type="text" id="upd_course" style="margin: 5px; padding: 8px;"><br>
+
+            <label>Semester:</label>
+            <input type="text" id="upd_semester" style="margin: 5px; padding: 8px;"><br>
+
+            <button type="button" id="Submit" onclick="update()">Update</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
